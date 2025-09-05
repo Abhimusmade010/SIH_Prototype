@@ -7,17 +7,18 @@ const registerUser = async (req, res) => {
     const{username, email, password} = req.body;
 
     try {
-        const existingUser = await userModel.findOne({ email });  //check is already user exists with same email
+        const existingUser = await userModel.findOne({ email });                //check is already user exists with same email
 
 
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' }); // is exists return message thats uswr already exists
+            return res.status(400).json({ message: 'User already exists' });    // is exists return message thats uswr already exists
         }   
-        const hashedPassword = await bcrypt.hash(password, 10);    //hashed the oroginal passsowrd before creating user 
+        const hashedPassword = await bcrypt.hash(password, 10);                 //hashed the oroginal passsowrd before creating user 
         
-        const newUser = new User(
+        const newUser = new userModel(
             { 
-                username, email, 
+                username, 
+                email, 
                 password: hashedPassword 
             }
         );
@@ -31,3 +32,5 @@ const registerUser = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }   
 };
+
+module.exports = { registerUser };
